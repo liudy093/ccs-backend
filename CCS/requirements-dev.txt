@@ -1,0 +1,8 @@
+mypy
+black
+
+grpcio-tools
+gunicorn
+uvicorn
+PyWavelets
+pysnooper

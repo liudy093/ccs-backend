@@ -1,0 +1,42 @@
+syntax = "proto3";
+package scheduler_controller;
+
+service SchedulerController {
+  // 调度器内保活器向调度器控制器发送保活信号
+  rpc KeepAlive(KeepAliveRequest) returns (KeepAliveReply);
+  // 前端输入工作流
+  rpc InputWorkflow(InputWorkflowRequest) returns (InputWorkflowReply);
+}
+
+message KeepAliveRequest {
+  // 调度器id
+  string sid = 1;
+  // 调度器自测压力值（0~100，整数）
+  fixed32 pressure = 2;
+  // 调度器承载力（还可以承载/接收多少工作流，单位：个，整数）
+  fixed32 capacity = 3;
+  // 保活序号（单调增，整数，从1开始）
+  uint64 serial_number = 4;
+  // ipv4地址(ip:port)
+  string ipv4 = 5;
+}
+
+message KeepAliveReply {
+  // 下一次发送保活信号等待时间(从收到此应答到再次发送保活信号的等待时间，单位：秒)
+  // 不会小于 1 秒
+  int32 wait_secs = 1;
+}
+
+// service InputWorkflowService {
+//   // 前端输入工作流
+//   rpc InputWorkflow(InputWorkflowRequest) returns (InputWorkflowReply);
+// }
+
+message InputWorkflowRequest{
+  // 
+  repeated bytes workflow = 1;
+}
+
+message InputWorkflowReply{
+  uint32 accept = 1;
+}
